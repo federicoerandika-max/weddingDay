@@ -131,6 +131,35 @@
       margin: auto;
       font-size: 16px;
     }
+
+    #addToHome, #iosSteps, #androidSteps {
+      font-size: 13px;
+      padding: 5%;
+    }
+
+    #signature {
+      margin-top: 40px;
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: #444;
+      opacity: 0.9;
+    }
+
+    #signature::before {
+      content: "— ";
+    }
+
+    #signature::after {
+      content: " —";
+    }
+
+    @media (max-width: 600px) {
+      #signature {
+        font-size: 22px;
+      }
+    }
+
+
   </style>
 </head>
 
@@ -162,6 +191,10 @@
 
   <!-- TEXT -->
   <p id="intro" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
+
+  <div id="signature" data-aos="fade-up" data-aos-anchor="#formTitle" data-aos-delay="300">
+    <span id="signatureText"></span>
+  </div>
 
   <!-- FORM -->
   <h2 id="formTitle" data-aos="fade-up"></h2>
@@ -225,7 +258,8 @@ const translations = {
     addHomeTitle: "Aggiungi alla Home 📲",
     addHomeIntro: "Puoi salvare questo sito come se fosse un’app sul tuo telefono.",
     iosSteps: "Tocca il pulsante <strong>Condividi</strong> (⬆️) → <strong>Aggiungi alla schermata Home</strong> → Conferma.",
-    androidSteps: "Tocca i <strong>tre puntini</strong> (⋮) → <strong>Aggiungi a schermata Home</strong> → Conferma."
+    androidSteps: "Tocca i <strong>tre puntini</strong> (⋮) → <strong>Aggiungi a schermata Home</strong> → Conferma.",
+    signature: "Federico & Erandika"
   },
   en: {
     title: "We’re getting married 💍",
@@ -247,7 +281,8 @@ const translations = {
     addHomeTitle: "Add to Home Screen 📲",
     addHomeIntro: "You can save this website like an app on your phone.",
     iosSteps: "Tap <strong>Share</strong> (⬆️) → <strong>Add to Home Screen</strong> → Confirm.",
-    androidSteps: "Tap the <strong>three dots</strong> (⋮) → <strong>Add to Home Screen</strong> → Confirm."
+    androidSteps: "Tap the <strong>three dots</strong> (⋮) → <strong>Add to Home Screen</strong> → Confirm.",
+    signature: "Federico & Erandika"
   }
 };
 
@@ -281,6 +316,7 @@ function applyLanguage(lang) {
   document.getElementById('addHomeIntro').innerHTML = t.addHomeIntro;
   document.getElementById('iosSteps').innerHTML = t.iosSteps;
   document.getElementById('androidSteps').innerHTML = t.androidSteps;
+  document.getElementById('signatureText').innerHTML = t.signature;
 
   const videoSource = document.getElementById('videoSource');
   videoSource.src = lang === 'en' ? 'assets/video-en.mp4' : 'assets/video-it.mp4';
