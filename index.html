@@ -195,6 +195,21 @@
       box-shadow: 0 6px 18px rgba(0,0,0,0.1);
     }
 
+    @keyframes videoExit {
+      from {
+        transform: scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: scale(0.92);
+        opacity: 0;
+      }
+    }
+
+    .video-wrapper.exit {
+      animation: videoExit 1s ease forwards;
+    }
+
   </style>
 </head>
 
@@ -410,6 +425,10 @@ function addToCalendar() {
     "&location=Giardini+la+Pergola,+Via+Dazio+35,+Alessandria",
     "_blank"
   );
+}
+
+function openGift() {
+  window.location.href = "gift.html";
 }
 
 /* ================== COUNTDOWN ================== */
