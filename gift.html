@@ -45,6 +45,13 @@
             font-weight: 500;
             letter-spacing: 0.5px;
             word-break: break-all;
+            cursor: pointer;
+            transition: transform .15s ease, background .15s ease;
+        }
+
+        iban:active {
+            transform: scale(0.97);
+            background: #ece7e2;
         }
 
         a {
@@ -57,6 +64,46 @@
             text-decoration: none;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
+
+        #giftSheet {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            z-index: 2000;
+        }
+
+        #giftSheet.active {
+            display: block;
+        }
+
+        .sheet-content {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: #faf7f4;
+            border-radius: 24px 24px 0 0;
+            padding: 30px 20px;
+            animation: slideUp .4s ease;
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 5px;
+            background: #ccc;
+            border-radius: 10px;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -66,7 +113,10 @@
         <h1 id="title"></h1>
         <p id="text"></p>
 
-        <div class="iban" id="iban"></div>
+        <div class="iban" onclick="copyIBAN()">
+            <span id="ibanText"></span><br>
+            <small id="copyHint"></small>
+        </div>
 
         <a href="index.html" id="back"></a>
     </div>
@@ -80,20 +130,53 @@
                 title: "Un pensiero per noi 🎁",
                 text: "Il regalo più grande per noi sarà avervi accanto in questo giorno speciale.<br><br>Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️",
                 iban: "IBAN: IT00 X000 0000 0000 0000 000",
-                back: "Torna al sito"
+                back: "Torna al sito",
+                copy: "Tocca per copiare",
+                giftTitle: "Un pensiero per noi 🎁",
             },
             en: {
                 title: "A little thought for us 🎁",
                 text: "Having you with us is the greatest gift.<br><br>For those who wish, here are the details for a small, heartfelt thought ❤️",
                 iban: "IBAN: IT00 X000 0000 0000 0000 000",
-                back: "Back to the website"
+                back: "Back to the website",
+                copy: "Click to copy",
+                giftTitle: "A little thought for us 🎁",
             }
         };
 
         document.getElementById('title').innerHTML = t[lang].title;
         document.getElementById('text').innerHTML = t[lang].text;
-        document.getElementById('iban').innerHTML = t[lang].iban;
         document.getElementById('back').innerHTML = t[lang].back;
+        document.getElementById('ibanText').innerText = t[lang].iban;
+        document.getElementById('copyHint').innerHTML = t[lang].copy;
+
+
+        
+        function copyIBAN() {
+            const text = document.getElementById('ibanText').innerText;
+            navigator.clipboard.writeText(text);
+
+            const hint = document.getElementById('copyHint');
+            hint.innerHTML = lang === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
+
+            setTimeout(() => {
+                hint.innerHTML = lang === 'it'
+                    ? 'Tocca per copiare'
+                    : 'Tap to copy';
+            }, 2000);
+        }
+
+        function openGift() {
+            if (window.innerWidth < 768) {
+                document.getElementById('giftSheet').classList.add('active');
+            } else {
+                window.location.href = "gift.html";
+            }
+        }
+
+        function closeGiftSheet() {
+            document.getElementById('giftSheet').classList.remove('active');
+        }
     </script>
 
 </body>
