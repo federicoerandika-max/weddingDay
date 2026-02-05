@@ -217,16 +217,12 @@ function applyLanguage(lang) {
     if (video.duration && video.currentTime >= video.duration - offset) {
       video.pause();
       video.currentTime = video.duration - offset;
+
+      /* ================== TOOLTIP ================== */
+      document.querySelectorAll('.tooltip').forEach(t => t.style.display = 'block');
     }
   });
 }
-
-/* ================== TOOLTIP ================== */
-const video = document.getElementById('weddingVideo');
-video.addEventListener('ended', () => {
-  document.querySelectorAll('.tooltip').forEach(t => t.style.display = 'block');
-});
-
 
 /* ================== LINKS ================== */
 function openMaps() {
