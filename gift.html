@@ -113,10 +113,15 @@
         <h1 id="title"></h1>
         <p id="text"></p>
 
+        <div class="iban" onclick="copyName()">
+            <span id="nameText"></span><br>
+            <small id="copyHintName"></small>
+        </div>
         <div class="iban" onclick="copyIBAN()">
             <span id="ibanText"></span><br>
-            <small id="copyHint"></small>
+            <small id="copyHintIBAN"></small>
         </div>
+
 
         <a href="index.html" id="back"></a>
     </div>
@@ -129,18 +134,20 @@
             it: {
                 title: "Un pensiero per noi 🎁",
                 text: "Il regalo più grande per noi sarà avervi accanto in questo giorno speciale.<br><br>Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️",
-                iban: "IBAN: IT00 X000 0000 0000 0000 000",
+                iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
                 back: "Torna al sito",
                 copy: "Tocca per copiare",
                 giftTitle: "Un pensiero per noi 🎁",
+                name: "INTESTATARIO: FEDERICO HARIN ATTYGALA"
             },
             en: {
                 title: "A little thought for us 🎁",
                 text: "Having you with us is the greatest gift.<br><br>For those who wish, here are the details for a small, heartfelt thought ❤️",
-                iban: "IBAN: IT00 X000 0000 0000 0000 000",
+                iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
                 back: "Back to the website",
                 copy: "Click to copy",
                 giftTitle: "A little thought for us 🎁",
+                name: "ACCOUNT HOLDER: HARIN FEDERICO ATTYGALA"
             }
         };
 
@@ -148,15 +155,35 @@
         document.getElementById('text').innerHTML = t[lang].text;
         document.getElementById('back').innerHTML = t[lang].back;
         document.getElementById('ibanText').innerText = t[lang].iban;
-        document.getElementById('copyHint').innerHTML = t[lang].copy;
+        document.getElementById('copyHintIBAN').innerHTML = t[lang].copy;
+        document.getElementById('nameText').innerHTML = t[lang].name;
+        document.getElementById('copyHintName').innerHTML = t[lang].copy;
+
 
 
         
         function copyIBAN() {
             const text = document.getElementById('ibanText').innerText;
-            navigator.clipboard.writeText(text);
 
-            const hint = document.getElementById('copyHint');
+            navigator.clipboard.writeText(text.replace(' ', '').replace('IBAN:', ''));
+
+            const hint = document.getElementById('copyHintIBAN');
+            hint.innerHTML = lang === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
+
+            setTimeout(() => {
+                hint.innerHTML = lang === 'it'
+                    ? 'Tocca per copiare'
+                    : 'Tap to copy';
+            }, 2000);
+        }
+
+        
+        function copyName() {
+            const text = document.getElementById('nameText').innerText;
+
+            navigator.clipboard.writeText((lang === 'it') ? text.replace('INTESTATARIO: ', '') : text.replace('ACCOUNT HOLDER: ', ''));
+
+            const hint = document.getElementById('copyHintName');
             hint.innerHTML = lang === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
 
             setTimeout(() => {
