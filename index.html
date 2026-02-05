@@ -210,6 +210,82 @@
       animation: videoExit 1s ease forwards;
     }
 
+    .iban {
+        margin: 25px 0;
+        padding: 20px;
+        border-radius: 16px;
+        background: #f6f3f0;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        word-break: break-all;
+        cursor: pointer;
+        transition: transform .15s ease, background .15s ease;
+    }
+
+    iban:active {
+        transform: scale(0.97);
+        background: #ece7e2;
+    }
+
+    a {
+        display: inline-block;
+        margin-top: 25px;
+        padding: 12px 24px;
+        border-radius: 30px;
+        background: #fff;
+        color: #333;
+        text-decoration: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    #giftSheet {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      z-index: 2000;
+    }
+
+    #giftSheet.active {
+      display: block;
+    }
+
+    .sheet-content {
+      position: absolute;
+      bottom: 0;
+      width: 90%;
+      background: #faf7f4;
+      border-radius: 24px 24px 0 0;
+      padding: 30px 20px;
+      animation: slideUp .4s ease;
+    }
+
+    .sheet-handle {
+      width: 40px;
+      height: 5px;
+      background: #ccc;
+      border-radius: 10px;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    button#closeButton {
+      background: white;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid white;
+      font-family: 'Montserrat', sans-serif;
+    }
+
   </style>
 </head>
 
@@ -233,6 +309,7 @@
 
     <div class="tooltip location" onclick="openMaps()">📍 <span id="locationLabel"></span></div>
     <div class="tooltip date" onclick="addToCalendar()">📅 <span id="dateLabel"></span></div>
+
   </div>
 
   <!-- COUNTDOWN -->
@@ -319,7 +396,12 @@ const translations = {
     signature: "Federico & Erandika",
     btnLocation: "Location",
     btnDate: "Salva la data",
-    btnGift: "Se desiderate farci un regalo, il dono più grande per noi sarà avervi accanto. Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️"
+    btnGift: "Se desiderate farci un regalo, il dono più grande per noi sarà avervi accanto. Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️",
+    giftTitle: "Un pensiero per noi 🎁",
+    giftText: "Il regalo più grande per noi sarà avervi accanto in questo giorno speciale.<br><br>Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️",
+    iban: "IBAN: IT00 X000 0000 0000 0000 000",
+    copy: "Tocca per copiare",
+    closeButton: 'Chiudi'
   },
   en: {
     title: "We’re getting married 💍",
@@ -345,9 +427,16 @@ const translations = {
     signature: "Federico & Erandika",
     btnLocation: "Location",
     btnDate: "Save the date",
-    btnGift: "Having you with us is the greatest gift. For those who wish, here you’ll find the details for a small, heartfelt thought ❤️"
+    btnGift: "Having you with us is the greatest gift. For those who wish, here you’ll find the details for a small, heartfelt thought ❤️",
+    giftTitle: "A little thought for us 🎁",
+    giftText: "Having you with us is the greatest gift.<br><br>For those who wish, here are the details for a small, heartfelt thought ❤️",
+    iban: "IBAN: IT00 X000 0000 0000 0000 000",
+    copy: "Click to copy",
+    closeButton: 'Close'
   }
 };
+
+var globalLanguage = {};
 
 /* ================== LANGUAGE ================== */
 function detectLanguage() {
@@ -367,6 +456,8 @@ function setLanguage(lang) {
 function applyLanguage(lang) {
   document.documentElement.lang = lang;
 
+  globalLanguage = lang;
+
   const t = translations[lang];
   document.getElementById('title').innerHTML = t.title;
   document.getElementById('intro').innerHTML = t.intro;
@@ -383,6 +474,7 @@ function applyLanguage(lang) {
   document.getElementById('btnLocation').innerHTML = t.btnLocation;
   document.getElementById('btnDate').innerHTML = t.btnDate;
   document.getElementById('btnGift').innerHTML = t.btnGift;
+  
 
   const videoSource = document.getElementById('videoSource');
   videoSource.src = lang === 'en' ? 'assets/video-en.mp4' : 'assets/video-it.mp4';
@@ -428,7 +520,33 @@ function addToCalendar() {
 }
 
 function openGift() {
-  window.location.href = "gift.html";
+  if (window.innerWidth < 768) {
+    document.getElementById('giftSheet').classList.add('active');
+
+    document.getElementById('ibanText').innerHTML = translations[globalLanguage].iban;
+    document.getElementById('copyHint').innerHTML = translations[globalLanguage].copy;
+    document.getElementById('closeButton').innerHTML = translations[globalLanguage].closeButton;
+  } else {
+    window.location.href = "gift.html";
+  }
+}
+
+function closeGiftSheet() {
+  document.getElementById('giftSheet').classList.remove('active');
+}
+
+function copyIBAN() {
+    const text = document.getElementById('ibanText').innerText;
+    navigator.clipboard.writeText(text);
+
+    const hint = document.getElementById('copyHint');
+    hint.innerHTML = globalLanguage === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
+
+    setTimeout(() => {
+        hint.innerHTML = globalLanguage === 'it'
+            ? 'Tocca per copiare'
+            : 'Tap to copy';
+    }, 2000);
 }
 
 /* ================== COUNTDOWN ================== */
@@ -459,6 +577,24 @@ setInterval(updateCountdown, 1000);
 /* INIT */
 applyLanguage(detectLanguage());
 </script>
+
+
+
+<div id="giftSheet">
+  <div class="sheet-content">
+    <div class="sheet-handle"></div>
+    <h2 id="giftTitle"></h2>
+    <p id="giftText"></p>
+
+    <div class="iban" onclick="copyIBAN()">
+      <span id="ibanText"></span><br>
+      <small id="copyHint"></small>
+    </div>
+
+    <button id="closeButton" onclick="closeGiftSheet()"></button>
+  </div>
+</div>
+
 
 </body>
 </html>
