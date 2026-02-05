@@ -159,6 +159,41 @@
       }
     }
 
+    body.lock-scroll {
+      overflow: hidden;
+    }
+
+    .video-wrapper.fullscreen {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      border-radius: 0;
+    }
+
+    .video-wrapper.fullscreen video {
+      height: 100vh;
+      object-fit: contain;
+      background: white;
+      border-radius: 0;
+    }
+
+    .info-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 40px 0;
+    }
+
+    .info-buttons button {
+      border: none;
+      background: white;
+      padding: 14px 22px;
+      border-radius: 30px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
 
   </style>
 </head>
@@ -203,6 +238,13 @@
 
   <br>
   <p id="futureUpdates" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
+
+
+  <div class="info-buttons" data-aos="fade-up">
+    <button onclick="openMaps()">📍 <span id="btnLocation"></span></button>
+    <button onclick="addToCalendar()">📅 <span id="btnDate"></span></button>
+    <button onclick="openGift()">🎁 <span id="btnGift"></span></button>
+  </div>
 </div>
 
 
@@ -247,9 +289,9 @@ const translations = {
     date: "Salva la data",
     intro: `
         Ebbene sì… ci siamo!<br><br>
-        Dopo tanta (tantissima!) attesa, possiamo dirlo ad alta voce: ci sposiamo! 👰🏽‍♀️🤵🏾‍♂️<br><br>
-        In questa pagina troverete un breve modulo da compilare, ci aiuterà a organizzare tutto al meglio
-        e a prenderci cura di ogni dettaglio, vi chiediamo solo di farci sapere entro il 30 marzo:<br><br>
+        Dopo tanta (tantissima!) attesa, possiamo dirlo ad alta voce: <strong>ci sposiamo! 👰🏽‍♀️🤵🏾‍♂️</strong><br><br>
+        In questa pagina troverete un breve <strong>modulo da compilare</strong>, ci aiuterà a organizzare tutto al meglio
+        e a prenderci cura di ogni dettaglio, vi chiediamo solo di farci sapere <strong>entro il 30 marzo</strong>:<br><br>
         Avervi accanto in questo giorno così importante per noi renderà tutto ancora più speciale.<br><br>
         Non vediamo l’ora di festeggiare, emozionarci e vivere questo momento insieme a voi,
         con le persone che amiamo davvero ❤️✨
@@ -259,7 +301,10 @@ const translations = {
     addHomeIntro: "Puoi salvare questo sito come se fosse un’app sul tuo telefono.",
     iosSteps: "Tocca il pulsante <strong>Condividi</strong> (⬆️) → <strong>Aggiungi alla schermata Home</strong> → Conferma.",
     androidSteps: "Tocca i <strong>tre puntini</strong> (⋮) → <strong>Aggiungi a schermata Home</strong> → Conferma.",
-    signature: "Federico & Erandika"
+    signature: "Federico & Erandika",
+    btnLocation: "Location",
+    btnDate: "Salva la data",
+    btnGift: "Se desiderate farci un regalo, il dono più grande per noi sarà avervi accanto. Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️"
   },
   en: {
     title: "We’re getting married 💍",
@@ -270,9 +315,9 @@ const translations = {
     intro: `
       Here we are… it’s finally happening!<br><br>
       After so much (so, so much!) waiting, we can finally say it out loud:
-      we’re getting married! 👰🏽‍♀️🤵🏾‍♂️<br><br>
-      On this page you’ll find a short form to fill out — it will help us organize everything
-      as smoothly as possible and take care of all the little details, please let us know by March 30th:<br><br>
+      <strong>we’re getting married! 👰🏽‍♀️🤵🏾‍♂️</strong><br><br>
+      On this page you’ll find a <strong>short form to fill out</strong> — it will help us organize everything
+      as smoothly as possible and take care of all the little details, please let us know <strong>by March 30th</strong>:<br><br>
       Having you by our side on such an important day will make it even more special.<br><br>
       We can’t wait to celebrate, get emotional, and share this moment with you,
       with the people we truly love ❤️✨
@@ -282,7 +327,10 @@ const translations = {
     addHomeIntro: "You can save this website like an app on your phone.",
     iosSteps: "Tap <strong>Share</strong> (⬆️) → <strong>Add to Home Screen</strong> → Confirm.",
     androidSteps: "Tap the <strong>three dots</strong> (⋮) → <strong>Add to Home Screen</strong> → Confirm.",
-    signature: "Federico & Erandika"
+    signature: "Federico & Erandika",
+    btnLocation: "Location",
+    btnDate: "Save the date",
+    btnGift: "Having you with us is the greatest gift. For those who wish, here you’ll find the details for a small, heartfelt thought ❤️"
   }
 };
 
@@ -317,6 +365,9 @@ function applyLanguage(lang) {
   document.getElementById('iosSteps').innerHTML = t.iosSteps;
   document.getElementById('androidSteps').innerHTML = t.androidSteps;
   document.getElementById('signatureText').innerHTML = t.signature;
+  document.getElementById('btnLocation').innerHTML = t.btnLocation;
+  document.getElementById('btnDate').innerHTML = t.btnDate;
+  document.getElementById('btnGift').innerHTML = t.btnGift;
 
   const videoSource = document.getElementById('videoSource');
   videoSource.src = lang === 'en' ? 'assets/video-en.mp4' : 'assets/video-it.mp4';
@@ -325,6 +376,9 @@ function applyLanguage(lang) {
   const video = document.getElementById('weddingVideo');
   video.load();
   video.play();
+  const wrapper = document.querySelector('.video-wrapper');
+  document.body.classList.add('lock-scroll');
+  wrapper.classList.add('fullscreen');
   video.onended = null;
   video.ontimeupdate = null;
 
@@ -333,7 +387,11 @@ function applyLanguage(lang) {
       video.pause();
       video.currentTime = video.duration - offset;
 
-      /* ================== TOOLTIP ================== */
+      /* UNLOCK SCROLL */
+      document.body.classList.remove('lock-scroll');
+      wrapper.classList.remove('fullscreen');
+
+      /* TOOLTIP */
       document.querySelectorAll('.tooltip').forEach(t => t.style.display = 'block');
     }
   };
