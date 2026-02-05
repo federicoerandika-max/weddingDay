@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Un pensiero per noi 🎁</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: #faf7f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 24px;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 20px;
+        }
+
+        .iban {
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 16px;
+            background: #f6f3f0;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            word-break: break-all;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 24px;
+            border-radius: 30px;
+            background: #fff;
+            color: #333;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1 id="title"></h1>
+        <p id="text"></p>
+
+        <div class="iban" id="iban"></div>
+
+        <a href="index.html" id="back"></a>
+    </div>
+
+    <script>
+        const lang = (localStorage.getItem('lang') ||
+            (navigator.language || '').startsWith('en') ? 'en' : 'it');
+
+        const t = {
+            it: {
+                title: "Un pensiero per noi 🎁",
+                text: "Il regalo più grande per noi sarà avervi accanto in questo giorno speciale.<br><br>Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️",
+                iban: "IBAN: IT00 X000 0000 0000 0000 000",
+                back: "Torna al sito"
+            },
+            en: {
+                title: "A little thought for us 🎁",
+                text: "Having you with us is the greatest gift.<br><br>For those who wish, here are the details for a small, heartfelt thought ❤️",
+                iban: "IBAN: IT00 X000 0000 0000 0000 000",
+                back: "Back to the website"
+            }
+        };
+
+        document.getElementById('title').innerHTML = t[lang].title;
+        document.getElementById('text').innerHTML = t[lang].text;
+        document.getElementById('iban').innerHTML = t[lang].iban;
+        document.getElementById('back').innerHTML = t[lang].back;
+    </script>
+
+</body>
+
+</html>
