@@ -161,7 +161,29 @@
   <h2 id="formTitle" data-aos="fade-up"></h2>
   <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdMn0MNh3PHIAVU8OO1W1rGzOxo4_UyxrAfP-YkgaRZuObMDg/viewform?embedded=true"></iframe>
 
+
+  <br>
+  <p id="futureUpdates" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
 </div>
+
+
+<section id="addToHome" data-aos="fade-up" style="margin-top:50px;">
+  <h2 id="addHomeTitle"></h2>
+
+  <div style="max-width:700px;margin:auto;font-size:15px;line-height:1.6;">
+    <p id="addHomeIntro"></p>
+
+    <div style="text-align:left;margin-top:20px;">
+      <p><strong>📱 iPhone (Safari)</strong><br>
+        <span id="iosSteps"></span>
+      </p>
+
+      <p><strong>🤖 Android (Chrome)</strong><br>
+        <span id="androidSteps"></span>
+      </p>
+    </div>
+  </div>
+</section>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
@@ -192,7 +214,12 @@ const translations = {
       • se ci saranno bambini e la loro età<br>
       • se raggiungerete la location in auto o con il pullman<br><br>
       Avervi accanto in questo giorno così importante per noi renderà tutto ancora più speciale ❤️✨
-    `
+    `,
+    futureUpdates: "Seguiranno a breve ulteriori dettagli dell\'evento.",
+    addHomeTitle: "Aggiungi alla Home 📲",
+    addHomeIntro: "Puoi salvare questo sito come se fosse un’app sul tuo telefono.",
+    iosSteps: "Tocca il pulsante <strong>Condividi</strong> (⬆️) → <strong>Aggiungi alla schermata Home</strong> → Conferma.",
+    androidSteps: "Tocca i <strong>tre puntini</strong> (⋮) → <strong>Aggiungi a schermata Home</strong> → Conferma."
   },
   en: {
     title: "We’re getting married 💍",
@@ -208,7 +235,12 @@ const translations = {
       • if children will attend and their age<br>
       • whether you’ll reach the venue by car or by bus<br><br>
       Having you with us on such an important day will make it even more special ❤️✨
-    `
+    `,
+    futureUpdates: "Stay tuned for more updates regarding the event.",
+    addHomeTitle: "Add to Home Screen 📲",
+    addHomeIntro: "You can save this website like an app on your phone.",
+    iosSteps: "Tap <strong>Share</strong> (⬆️) → <strong>Add to Home Screen</strong> → Confirm.",
+    androidSteps: "Tap the <strong>three dots</strong> (⋮) → <strong>Add to Home Screen</strong> → Confirm."
   }
 };
 
@@ -236,6 +268,11 @@ function applyLanguage(lang) {
   document.getElementById('formTitle').innerHTML = t.formTitle;
   document.getElementById('locationLabel').innerHTML = t.location;
   document.getElementById('dateLabel').innerHTML = t.date;
+  document.getElementById('futureUpdates').innerHTML = t.futureUpdates;
+  document.getElementById('addHomeTitle').innerHTML = t.addHomeTitle;
+  document.getElementById('addHomeIntro').innerHTML = t.addHomeIntro;
+  document.getElementById('iosSteps').innerHTML = t.iosSteps;
+  document.getElementById('androidSteps').innerHTML = t.androidSteps;
 
   const videoSource = document.getElementById('videoSource');
   videoSource.src = lang === 'en' ? 'assets/video-en.mp4' : 'assets/video-it.mp4';
