@@ -4,11 +4,21 @@
   <meta charset="UTF-8">
   <title>Wedding Day 💍</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="assets/img/wedding-logo.png">
+  <link rel="apple-touch-icon" href="assets/img/wedding-logo.png">
+  <meta property="og:title" content="Save the date, here we are! 💍">
+  <meta property="og:description" content="Scopri tutti i dettagli e conferma la tua presenza">
+  <meta property="og:image" content="https://federicoerandika-max.github.io/weddingDay/preview.jpg">
+  <meta property="og:url" content="https://federicoerandika-max.github.io/weddingDay">
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
   <style>
+    [data-aos] {
+      transition-property: transform, opacity;
+    }
+    
     body {
       margin: 0;
       font-family: 'Montserrat', sans-serif;
@@ -105,6 +115,15 @@
     @media (max-width: 600px) {
       .tooltip.location { top: 10%; left: 5%; }
       .tooltip.date { bottom: 10%; right: 5%; }
+      .countdown {
+        gap: 10px;
+      }
+    
+      .countdown div {
+        padding: 12px;
+        min-width: 60px;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
@@ -132,19 +151,31 @@
   </div>
 
   <!-- COUNTDOWN -->
-  <h2 id="countdownTitle"></h2>
-  <div class="countdown" id="countdown"></div>
+  <h2 id="countdownTitle" data-aos="fade-up"></h2>
+  <div class="countdown" id="countdown" data-aos="zoom-in" data-aos-delay="300"></div>
 
   <!-- TEXT -->
-  <p id="intro" style="margin-top:30px; line-height:1.7;"></p>
+  <p id="intro" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
 
   <!-- FORM -->
-  <h2 id="formTitle"></h2>
+  <h2 id="formTitle" data-aos="fade-up"></h2>
   <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdMn0MNh3PHIAVU8OO1W1rGzOxo4_UyxrAfP-YkgaRZuObMDg/viewform?embedded=true"></iframe>
 
 </div>
 
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
+  /* ================== TRANSITIONS ================== */
+  AOS.init({
+    duration: 900,
+    once: true,
+    easing: 'ease-out-cubic'
+  });
+</script>
+  
+<script>
+  
+  
 /* ================== TRANSLATIONS ================== */
 const translations = {
   it: {
@@ -213,8 +244,10 @@ function applyLanguage(lang) {
   const video = document.getElementById('weddingVideo');
   video.load();
   video.play();
+  video.onended = null;
+  video.ontimeupdate = null;
 
-  video.addEventListener('timeupdate', () => {
+  video.ontimeupdate = () => {
     if (video.duration && video.currentTime >= video.duration - offset) {
       video.pause();
       video.currentTime = video.duration - offset;
@@ -222,7 +255,7 @@ function applyLanguage(lang) {
       /* ================== TOOLTIP ================== */
       document.querySelectorAll('.tooltip').forEach(t => t.style.display = 'block');
     }
-  });
+  };
 }
 
 /* ================== LINKS ================== */
@@ -240,19 +273,14 @@ function addToCalendar() {
   );
 }
 
-/* ================== COUNTDOWN (Europe/Rome) ================== */
-const weddingTime = "2026-06-11T14:30:00";
+/* ================== COUNTDOWN ================== */
+const weddingDate = new Date("2026-06-11T14:30:00+02:00"); // Europe/Rome (DST)
 
-setInterval(() => {
-  const now = new Date(
-    new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Rome" }).format(new Date())
-  ).getTime();
-
-  const weddingDate = new Date(
-    new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Rome" }).format(new Date(weddingTime))
-  ).getTime();
-
+function updateCountdown() {
+  const now = new Date();
   const diff = weddingDate - now;
+
+  if (diff <= 0) return;
 
   const d = Math.floor(diff / (1000 * 60 * 60 * 24));
   const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -260,12 +288,15 @@ setInterval(() => {
   const s = Math.floor((diff / 1000) % 60);
 
   document.getElementById("countdown").innerHTML = `
-    <div>${d}<br>Days</div>
-    <div>${h}<br>Hours</div>
+    <div>${d}<br>${document.documentElement.lang === 'it' ? 'Giorni' : 'Days'}</div>
+    <div>${h}<br>${document.documentElement.lang === 'it' ? 'Ore' : 'Hours'}</div>
     <div>${m}<br>Min</div>
     <div>${s}<br>Sec</div>
   `;
-}, 1000);
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
 
 /* INIT */
 applyLanguage(detectLanguage());
