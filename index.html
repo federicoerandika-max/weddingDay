@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Ci sposiamo 💍</title>
+  <title>Wedding Day 💍</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
@@ -26,7 +26,20 @@
       padding: 20px;
     }
 
-    /* VIDEO */
+    .lang-switch {
+      margin-bottom: 15px;
+    }
+
+    .lang-switch button {
+      border: none;
+      background: white;
+      padding: 8px 14px;
+      margin: 0 5px;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
     .video-wrapper {
       position: relative;
       border-radius: 16px;
@@ -38,7 +51,6 @@
       border-radius: 16px;
     }
 
-    /* TOOLTIP */
     .tooltip {
       position: absolute;
       background: rgba(255,255,255,0.95);
@@ -66,13 +78,11 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* COUNTDOWN */
     .countdown {
       display: flex;
       justify-content: center;
       gap: 15px;
       margin: 30px 0;
-      font-size: 18px;
     }
 
     .countdown div {
@@ -83,132 +93,176 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     }
 
-    /* FORM */
     iframe {
       width: 100%;
       min-height: 900px;
       border: none;
-      margin-top: 30px;
       border-radius: 20px;
+      margin-top: 30px;
     }
 
     @media (max-width: 600px) {
-      .tooltip.location {
-        top: 10%;
-        left: 5%;
-      }
-      .tooltip.date {
-        bottom: 10%;
-        right: 5%;
-      }
+      .tooltip.location { top: 10%; left: 5%; }
+      .tooltip.date { bottom: 10%; right: 5%; }
     }
   </style>
 </head>
+
 <body>
 
 <div class="container">
 
-  <h1>Ci sposiamo 💍</h1>
+  <!-- LANGUAGE SWITCH -->
+  <div class="lang-switch">
+    <button onclick="setLanguage('it')">🇮🇹 Italiano</button>
+    <button onclick="setLanguage('en')">🇬🇧 English</button>
+  </div>
+
+  <h1 id="title"></h1>
 
   <!-- VIDEO -->
   <div class="video-wrapper">
     <video id="weddingVideo" autoplay muted playsinline>
-      <source src="assets/video.mp4" type="video/mp4">
-      Il tuo browser non supporta il video.
+      <source id="videoSource" src="" type="video/mp4">
     </video>
 
-    <div class="tooltip location" onclick="openMaps()">📍 Location</div>
-    <div class="tooltip date" onclick="addToCalendar()">📅 Salva la data</div>
+    <div class="tooltip location" onclick="openMaps()">📍 <span id="locationLabel"></span></div>
+    <div class="tooltip date" onclick="addToCalendar()">📅 <span id="dateLabel"></span></div>
   </div>
 
   <!-- COUNTDOWN -->
-  <h2>Countdown al grande giorno</h2>
+  <h2 id="countdownTitle"></h2>
   <div class="countdown" id="countdown"></div>
 
-  <!-- TESTO -->
-  <p style="margin-top:30px; line-height:1.7;">
-    Ebbene sì ragazzi… è arrivato finalmente il momento di mandarvi le partecipazioni!<br><br>
-    Dopo tanta, tantissima attesa (lo sappiamo), ma ora è ufficiale: ci sposiamo 👰🏽‍♀️🤵🏾‍♂️<br><br>
-    Per aiutarci a organizzare tutto al meglio, vi chiediamo di farci sapere entro il <strong>30 marzo</strong>:<br>
-    • eventuali intolleranze o allergie alimentari<br>
-    • se ci saranno bambini e la loro età<br>
-    • se raggiungerete la location in auto o con il pullman<br><br>
-    Avervi accanto in questo giorno così importante per noi renderà tutto ancora più speciale ❤️✨
-  </p>
+  <!-- TEXT -->
+  <p id="intro" style="margin-top:30px; line-height:1.7;"></p>
 
-  <!-- GOOGLE FORM -->
-  <h2>Conferma la tua presenza</h2>
-
-  <iframe
-    src="https://docs.google.com/forms/d/e/1FAIpQLSdMn0MNh3PHIAVU8OO1W1rGzOxo4_UyxrAfP-YkgaRZuObMDg/viewform?embedded=true">
-    Caricamento…
-  </iframe>
+  <!-- FORM -->
+  <h2 id="formTitle"></h2>
+  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdMn0MNh3PHIAVU8OO1W1rGzOxo4_UyxrAfP-YkgaRZuObMDg/viewform?embedded=true"></iframe>
 
 </div>
 
 <script>
-  // TOOLTIP VISIBILITY
+/* ================== TRANSLATIONS ================== */
+const translations = {
+  it: {
+    title: "Ci sposiamo 💍",
+    countdownTitle: "Countdown al grande giorno",
+    formTitle: "Conferma la tua presenza",
+    location: "Location",
+    date: "Salva la data",
+    intro: `
+      Ebbene sì ragazzi… è arrivato finalmente il momento di mandarvi le partecipazioni!<br><br>
+      Dopo tanta, tantissima attesa (lo sappiamo), ma ora è ufficiale: ci sposiamo 👰🏽‍♀️🤵🏾‍♂️<br><br>
+      Per aiutarci a organizzare tutto al meglio, vi chiediamo di farci sapere entro il <strong>30 marzo</strong>:<br>
+      • eventuali intolleranze o allergie alimentari<br>
+      • se ci saranno bambini e la loro età<br>
+      • se raggiungerete la location in auto o con il pullman<br><br>
+      Avervi accanto in questo giorno così importante per noi renderà tutto ancora più speciale ❤️✨
+    `
+  },
+  en: {
+    title: "We’re getting married 💍",
+    countdownTitle: "Countdown to the big day",
+    formTitle: "RSVP",
+    location: "Location",
+    date: "Save the date",
+    intro: `
+      Yes, guys… the moment has finally come to send out the invitations!<br><br>
+      After a long, very long wait (we know), it’s finally official: we’re getting married 👰🏽‍♀️🤵🏾‍♂️<br><br>
+      To help us organize everything at best, please let us know by <strong>March 30th</strong>:<br>
+      • any food allergies or intolerances<br>
+      • if children will attend and their age<br>
+      • whether you’ll reach the venue by car or by bus<br><br>
+      Having you with us on such an important day will make it even more special ❤️✨
+    `
+  }
+};
+
+/* ================== LANGUAGE ================== */
+function detectLanguage() {
+  const saved = localStorage.getItem('lang');
+  if (saved) return saved;
+
+  const browserLang = navigator.language || navigator.userLanguage;
+  return browserLang.startsWith('en') ? 'en' : 'it';
+}
+
+function setLanguage(lang) {
+  localStorage.setItem('lang', lang);
+  applyLanguage(lang);
+}
+
+function applyLanguage(lang) {
+  document.documentElement.lang = lang;
+
+  const t = translations[lang];
+  document.getElementById('title').innerHTML = t.title;
+  document.getElementById('intro').innerHTML = t.intro;
+  document.getElementById('countdownTitle').innerHTML = t.countdownTitle;
+  document.getElementById('formTitle').innerHTML = t.formTitle;
+  document.getElementById('locationLabel').innerHTML = t.location;
+  document.getElementById('dateLabel').innerHTML = t.date;
+
+  const videoSource = document.getElementById('videoSource');
+  videoSource.src = lang === 'en' ? 'assets/video-en.mp4' : 'assets/video-it.mp4';
+
   const video = document.getElementById('weddingVideo');
-  const tooltips = document.querySelectorAll('.tooltip');
+  video.load();
+  video.play();
+}
 
-  video.addEventListener('ended', () => {
-    tooltips.forEach(t => t.style.display = 'block');
-  });
+/* ================== TOOLTIP ================== */
+const video = document.getElementById('weddingVideo');
+video.addEventListener('ended', () => {
+  document.querySelectorAll('.tooltip').forEach(t => t.style.display = 'block');
+});
 
-  function openMaps() {
-    window.open("https://share.google/fhkaPoKoyOM0UsZJw", "_blank");
-  }
+/* ================== LINKS ================== */
+function openMaps() {
+  window.open("https://share.google/fhkaPoKoyOM0UsZJw", "_blank");
+}
 
-  function addToCalendar() {
-    window.open(
-      "https://www.google.com/calendar/render?action=TEMPLATE" +
-      "&text=Matrimonio" +
-      "&dates=20260611T160000/20260611T230000" +
-      "&location=Giardini+la+Pergola,+Via+Dazio+35,+Alessandria",
-      "_blank"
-    );
-  }
+function addToCalendar() {
+  window.open(
+    "https://www.google.com/calendar/render?action=TEMPLATE" +
+    "&text=Wedding" +
+    "&dates=20260611T143000/20260611T230000" +
+    "&location=Giardini+la+Pergola,+Via+Dazio+35,+Alessandria",
+    "_blank"
+  );
+}
 
-  // COUNTDOWN
-  const weddingDate = new Date(
-    new Intl.DateTimeFormat("en-US", {
-      timeZone: "Europe/Rome",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false
-    }).formatToParts(new Date("2026-06-11T14:30:00"))
-      .reduce((acc, part) => {
-        acc[part.type] = part.value;
-        return acc;
-      }, {})
-      .year + "-" +
-      "06-11T14:30:00"
+/* ================== COUNTDOWN (Europe/Rome) ================== */
+const weddingTime = "2026-06-11T14:30:00";
+
+setInterval(() => {
+  const now = new Date(
+    new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Rome" }).format(new Date())
   ).getTime();
 
-  setInterval(() => {
-    const now = new Date(
-      new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Rome" })
-        .format(new Date())
-    ).getTime();
+  const weddingDate = new Date(
+    new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Rome" }).format(new Date(weddingTime))
+  ).getTime();
 
-    const diff = weddingDate - now;
+  const diff = weddingDate - now;
 
-    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const m = Math.floor((diff / (1000 * 60)) % 60);
-    const s = Math.floor((diff / 1000) % 60);
+  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const m = Math.floor((diff / (1000 * 60)) % 60);
+  const s = Math.floor((diff / 1000) % 60);
 
-    document.getElementById("countdown").innerHTML = `
-      <div>${d}<br>Giorni</div>
-      <div>${h}<br>Ore</div>
-      <div>${m}<br>Min</div>
-      <div>${s}<br>Sec</div>
-    `;
-  }, 1000);
+  document.getElementById("countdown").innerHTML = `
+    <div>${d}<br>Days</div>
+    <div>${h}<br>Hours</div>
+    <div>${m}<br>Min</div>
+    <div>${s}<br>Sec</div>
+  `;
+}, 1000);
+
+/* INIT */
+applyLanguage(detectLanguage());
 </script>
 
 </body>
