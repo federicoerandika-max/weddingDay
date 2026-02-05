@@ -210,7 +210,7 @@
       animation: videoExit 1s ease forwards;
     }
 
-    .iban {
+    .iban, .name {
         margin: 25px 0;
         padding: 20px;
         border-radius: 16px;
@@ -401,7 +401,8 @@ const translations = {
     giftText: "Il regalo più grande per noi sarà avervi accanto in questo giorno speciale.<br><br>Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️",
     iban: "IBAN: IT00 X000 0000 0000 0000 000",
     copy: "Tocca per copiare",
-    closeButton: 'Chiudi'
+    closeButton: 'Chiudi',
+    name: "INTESTATARIO: FEDERICO HARIN ATTYGALA"
   },
   en: {
     title: "We’re getting married 💍",
@@ -432,7 +433,8 @@ const translations = {
     giftText: "Having you with us is the greatest gift.<br><br>For those who wish, here are the details for a small, heartfelt thought ❤️",
     iban: "IBAN: IT00 X000 0000 0000 0000 000",
     copy: "Click to copy",
-    closeButton: 'Close'
+    closeButton: 'Close',
+    name: "ACCOUNT HOLDER: HARIN FEDERICO ATTYGALA"
   }
 };
 
@@ -523,8 +525,10 @@ function openGift() {
   if (window.innerWidth < 768) {
     document.getElementById('giftSheet').classList.add('active');
 
-    document.getElementById('ibanText').innerHTML = translations[globalLanguage].iban;
-    document.getElementById('copyHint').innerHTML = translations[globalLanguage].copy;
+    document.getElementById('ibanText').innerText = translations[globalLanguage].iban;
+    document.getElementById('copyHintIBAN').innerHTML = translations[globalLanguage].copy;
+    document.getElementById('nameText').innerHTML = translations[globalLanguage].name;
+    document.getElementById('copyHintName').innerHTML = translations[globalLanguage].copy;
     document.getElementById('closeButton').innerHTML = translations[globalLanguage].closeButton;
   } else {
     window.location.href = "gift.html";
@@ -537,9 +541,25 @@ function closeGiftSheet() {
 
 function copyIBAN() {
     const text = document.getElementById('ibanText').innerText;
-    navigator.clipboard.writeText(text);
 
-    const hint = document.getElementById('copyHint');
+    navigator.clipboard.writeText(text.replace(' ', '').replace('IBAN:', ''));
+
+    const hint = document.getElementById('copyHintIBAN');
+    hint.innerHTML = globalLanguage === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
+
+    setTimeout(() => {
+        hint.innerHTML = globalLanguage === 'it'
+            ? 'Tocca per copiare'
+            : 'Tap to copy';
+    }, 2000);
+}
+
+function copyName() {
+    const text = document.getElementById('nameText').innerText;
+
+    navigator.clipboard.writeText((globalLanguage === 'it') ? text.replace('INTESTATARIO: ', '') : text.replace('ACCOUNT HOLDER: ', ''));
+
+    const hint = document.getElementById('copyHintName');
     hint.innerHTML = globalLanguage === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
 
     setTimeout(() => {
@@ -586,9 +606,14 @@ applyLanguage(detectLanguage());
     <h2 id="giftTitle"></h2>
     <p id="giftText"></p>
 
+    
+    <div class="name" onclick="copyName()">
+        <span id="nameText"></span><br>
+        <small id="copyHintName"></small>
+    </div>
     <div class="iban" onclick="copyIBAN()">
       <span id="ibanText"></span><br>
-      <small id="copyHint"></small>
+      <small id="copyHintIBAN"></small>
     </div>
 
     <button id="closeButton" onclick="closeGiftSheet()"></button>
