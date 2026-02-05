@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Ci sposiamo! 💍</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: #faf7f4;
+      color: #333;
+      text-align: center;
+    }
+
+    h1, h2 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    /* VIDEO */
+    .video-wrapper {
+      position: relative;
+      padding-top: 56.25%;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* TOOLTIP */
+    .tooltip {
+      position: absolute;
+      background: rgba(255,255,255,0.95);
+      padding: 12px 18px;
+      border-radius: 20px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      display: none;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .tooltip.location {
+      top: 20%;
+      left: 10%;
+    }
+
+    .tooltip.date {
+      bottom: 20%;
+      right: 10%;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* COUNTDOWN */
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+      font-size: 18px;
+    }
+
+    .countdown div {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      min-width: 70px;
+    }
+
+    /* SURVEY */
+    form {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin-top: 30px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 500;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 30px;
+      border: none;
+      background: #d8a48f;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #c18b77;
+    }
+
+    /* SOCIAL */
+    .social {
+      margin: 40px 0;
+    }
+
+    .social a {
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .tooltip.location {
+        top: 10%;
+        left: 5%;
+      }
+      .tooltip.date {
+        bottom: 10%;
+        right: 5%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Ci sposiamo 💍</h1>
+
+  <!-- VIDEO -->
+  <div class="video-wrapper">
+    <iframe id="weddingVideo"
+      src="https://www.youtube.com/embed/VIDEO_ID?enablejsapi=1&autoplay=1&mute=1"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      allowfullscreen>
+    </iframe>
+
+    <div class="tooltip location" onclick="openMaps()">📍 Location</div>
+    <div class="tooltip date" onclick="addToCalendar()">📅 Salva la data</div>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <h2>Countdown al grande giorno</h2>
+  <div class="countdown" id="countdown"></div>
+
+  <!-- TESTO -->
+  <p style="margin-top:30px; line-height:1.6;">
+    Ebbene sì ragazzi… è arrivato finalmente il momento di mandarvi le partecipazioni!<br><br>
+    Dopo tanta, tantissima attesa (lo sappiamo), ma ora è ufficiale: ci sposiamo 👰🏽‍♀️🤵🏾‍♂️<br><br>
+    Per aiutarci a organizzare tutto al meglio, vi chiediamo di farci sapere entro il <strong>30 marzo</strong>:<br>
+    • eventuali intolleranze o allergie alimentari<br>
+    • se ci saranno bambini e la loro età<br>
+    • se raggiungerete la location in auto o con il pullman<br><br>
+    Non vediamo l’ora di festeggiare insieme a voi ❤️✨
+  </p>
+
+  <!-- SURVEY -->
+  <form>
+    <label>Nome e Cognome</label>
+    <input type="text" required>
+
+    <label>Allergie o intolleranze</label>
+    <textarea></textarea>
+
+    <label>Ci saranno bambini?</label>
+    <select>
+      <option>No</option>
+      <option>Sì</option>
+    </select>
+
+    <label>Come raggiungerai la location?</label>
+    <select>
+      <option>Auto</option>
+      <option>Pullman</option>
+    </select>
+
+    <button type="submit">Invia 💌</button>
+  </form>
+
+  <!-- SOCIAL -->
+  <div class="social">
+    <h2>Condividi</h2>
+    <a href="https://wa.me/?text=Ci sposiamo!%20Scopri%20di%20più" target="_blank">WhatsApp</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https://iltuosito.it" target="_blank">Facebook</a>
+  </div>
+
+</div>
+
+<script>
+  // TOOLTIP after video
+  let player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('weddingVideo', {
+      events: {
+        'onStateChange': function(event) {
+          if (event.data === YT.PlayerState.ENDED) {
+            document.querySelector('.tooltip.location').style.display = 'block';
+            document.querySelector('.tooltip.date').style.display = 'block';
+          }
+        }
+      }
+    });
+  }
+
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.body.appendChild(tag);
+
+  function openMaps() {
+    window.open("https://maps.google.com/?q=LOCATION_NAME");
+  }
+
+  function addToCalendar() {
+    window.open("https://www.google.com/calendar/render?action=TEMPLATE&text=Matrimonio&dates=20250720T160000/20250720T230000");
+  }
+
+  // COUNTDOWN
+  const weddingDate = new Date("2025-07-20T16:00:00").getTime();
+  setInterval(() => {
+    const now = new Date().getTime();
+    const diff = weddingDate - now;
+
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("countdown").innerHTML = `
+      <div>${d}<br>Giorni</div>
+      <div>${h}<br>Ore</div>
+      <div>${m}<br>Min</div>
+      <div>${s}<br>Sec</div>
+    `;
+  }, 1000);
+</script>
+
+</body>
+</html>
