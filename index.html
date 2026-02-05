@@ -64,13 +64,13 @@
     }
 
     .tooltip.location {
-      top: 20%;
-      left: 8%;
+      top: 8%;
+      left: 5%;
     }
 
     .tooltip.date {
-      bottom: 20%;
-      right: 8%;
+      bottom: 8%;
+      right: 5%;
     }
 
     @keyframes fadeIn {
@@ -208,9 +208,17 @@ function applyLanguage(lang) {
   const videoSource = document.getElementById('videoSource');
   videoSource.src = lang === 'en' ? 'assets/video-en.mp4' : 'assets/video-it.mp4';
 
+  const offset = 1; // secondi prima della fine
   const video = document.getElementById('weddingVideo');
   video.load();
   video.play();
+
+  video.addEventListener('timeupdate', () => {
+    if (video.duration && video.currentTime >= video.duration - offset) {
+      video.pause();
+      video.currentTime = video.duration - offset;
+    }
+  });
 }
 
 /* ================== TOOLTIP ================== */
@@ -219,9 +227,10 @@ video.addEventListener('ended', () => {
   document.querySelectorAll('.tooltip').forEach(t => t.style.display = 'block');
 });
 
+
 /* ================== LINKS ================== */
 function openMaps() {
-  window.open("https://share.google/fhkaPoKoyOM0UsZJw", "_blank");
+  window.open("https://maps.app.goo.gl/duaGwvAzbdR5dpmy7?g_st=ic", "_blank");
 }
 
 function addToCalendar() {
