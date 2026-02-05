@@ -2,10 +2,9 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Ci sposiamo! 💍</title>
+  <title>Ci sposiamo 💍</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
   <style>
@@ -30,17 +29,13 @@
     /* VIDEO */
     .video-wrapper {
       position: relative;
-      padding-top: 56.25%;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
     }
 
-    iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
+    video {
       width: 100%;
-      height: 100%;
+      border-radius: 16px;
     }
 
     /* TOOLTIP */
@@ -58,12 +53,12 @@
 
     .tooltip.location {
       top: 20%;
-      left: 10%;
+      left: 8%;
     }
 
     .tooltip.date {
       bottom: 20%;
-      right: 10%;
+      right: 8%;
     }
 
     @keyframes fadeIn {
@@ -83,59 +78,18 @@
     .countdown div {
       background: white;
       padding: 15px;
-      border-radius: 12px;
+      border-radius: 14px;
       min-width: 70px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     }
 
-    /* SURVEY */
-    form {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      margin-top: 30px;
-      text-align: left;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: 500;
-    }
-
-    input, textarea, select {
+    /* FORM */
+    iframe {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      margin-top: 25px;
-      width: 100%;
-      padding: 12px;
-      border-radius: 30px;
+      min-height: 900px;
       border: none;
-      background: #d8a48f;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #c18b77;
-    }
-
-    /* SOCIAL */
-    .social {
-      margin: 40px 0;
-    }
-
-    .social a {
-      margin: 0 10px;
-      text-decoration: none;
-      font-weight: 500;
+      margin-top: 30px;
+      border-radius: 20px;
     }
 
     @media (max-width: 600px) {
@@ -158,12 +112,10 @@
 
   <!-- VIDEO -->
   <div class="video-wrapper">
-    <iframe id="weddingVideo"
-      src="https://www.youtube.com/embed/VIDEO_ID?enablejsapi=1&autoplay=1&mute=1"
-      frameborder="0"
-      allow="autoplay; encrypted-media"
-      allowfullscreen>
-    </iframe>
+    <video id="weddingVideo" autoplay muted playsinline>
+      <source src="assets/video.mp4" type="video/mp4">
+      Il tuo browser non supporta il video.
+    </video>
 
     <div class="tooltip location" onclick="openMaps()">📍 Location</div>
     <div class="tooltip date" onclick="addToCalendar()">📅 Salva la data</div>
@@ -174,78 +126,52 @@
   <div class="countdown" id="countdown"></div>
 
   <!-- TESTO -->
-  <p style="margin-top:30px; line-height:1.6;">
+  <p style="margin-top:30px; line-height:1.7;">
     Ebbene sì ragazzi… è arrivato finalmente il momento di mandarvi le partecipazioni!<br><br>
     Dopo tanta, tantissima attesa (lo sappiamo), ma ora è ufficiale: ci sposiamo 👰🏽‍♀️🤵🏾‍♂️<br><br>
     Per aiutarci a organizzare tutto al meglio, vi chiediamo di farci sapere entro il <strong>30 marzo</strong>:<br>
     • eventuali intolleranze o allergie alimentari<br>
     • se ci saranno bambini e la loro età<br>
     • se raggiungerete la location in auto o con il pullman<br><br>
-    Non vediamo l’ora di festeggiare insieme a voi ❤️✨
+    Avervi accanto in questo giorno così importante per noi renderà tutto ancora più speciale ❤️✨
   </p>
 
-  <!-- SURVEY -->
-  <form>
-    <label>Nome e Cognome</label>
-    <input type="text" required>
+  <!-- GOOGLE FORM -->
+  <h2>Conferma la tua presenza</h2>
 
-    <label>Allergie o intolleranze</label>
-    <textarea></textarea>
-
-    <label>Ci saranno bambini?</label>
-    <select>
-      <option>No</option>
-      <option>Sì</option>
-    </select>
-
-    <label>Come raggiungerai la location?</label>
-    <select>
-      <option>Auto</option>
-      <option>Pullman</option>
-    </select>
-
-    <button type="submit">Invia 💌</button>
-  </form>
-
-  <!-- SOCIAL -->
-  <div class="social">
-    <h2>Condividi</h2>
-    <a href="https://wa.me/?text=Ci sposiamo!%20Scopri%20di%20più" target="_blank">WhatsApp</a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=https://iltuosito.it" target="_blank">Facebook</a>
-  </div>
+  <iframe
+    src="https://docs.google.com/forms/d/e/1FAIpQLSdMn0MNh3PHIAVU8OO1W1rGzOxo4_UyxrAfP-YkgaRZuObMDg/viewform?embedded=true">
+    Caricamento…
+  </iframe>
 
 </div>
 
 <script>
-  // TOOLTIP after video
-  let player;
-  function onYouTubeIframeAPIReady() {
-    player = new YT.Player('weddingVideo', {
-      events: {
-        'onStateChange': function(event) {
-          if (event.data === YT.PlayerState.ENDED) {
-            document.querySelector('.tooltip.location').style.display = 'block';
-            document.querySelector('.tooltip.date').style.display = 'block';
-          }
-        }
-      }
-    });
-  }
+  // TOOLTIP VISIBILITY
+  const video = document.getElementById('weddingVideo');
+  const tooltips = document.querySelectorAll('.tooltip');
 
-  const tag = document.createElement('script');
-  tag.src = "https://www.youtube.com/iframe_api";
-  document.body.appendChild(tag);
+  video.addEventListener('ended', () => {
+    tooltips.forEach(t => t.style.display = 'block');
+  });
 
   function openMaps() {
-    window.open("https://maps.google.com/?q=LOCATION_NAME");
+    window.open("https://share.google/fhkaPoKoyOM0UsZJw", "_blank");
   }
 
   function addToCalendar() {
-    window.open("https://www.google.com/calendar/render?action=TEMPLATE&text=Matrimonio&dates=20250720T160000/20250720T230000");
+    window.open(
+      "https://www.google.com/calendar/render?action=TEMPLATE" +
+      "&text=Matrimonio" +
+      "&dates=20260611T160000/20260611T230000" +
+      "&location=Giardini+la+Pergola,+Via+Dazio+35,+Alessandria",
+      "_blank"
+    );
   }
 
   // COUNTDOWN
-  const weddingDate = new Date("2025-07-20T16:00:00").getTime();
+  const weddingDate = new Date("2026-06-11T16:00:00").getTime();
+
   setInterval(() => {
     const now = new Date().getTime();
     const diff = weddingDate - now;
