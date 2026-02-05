@@ -7,7 +7,7 @@
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="assets/img/wedding-logo.png">
   <link rel="apple-touch-icon" href="assets/img/wedding-logo.png">
-  <meta property="og:title" content="Save the date, here we are! 💍">
+  <meta property="og:title" content="Save the date, here we are! Erandika & Federico 💍">
   <meta property="og:description" content="Scopri tutti i dettagli e conferma la tua presenza">
   <meta property="og:image" content="https://federicoerandika-max.github.io/weddingDay/preview.jpg">
   <meta property="og:url" content="https://federicoerandika-max.github.io/weddingDay">
@@ -156,6 +156,11 @@
     @media (max-width: 600px) {
       #signature {
         font-size: 22px;
+      }
+      
+
+      iframe {
+        min-height: 1980px;
       }
     }
 
@@ -344,6 +349,7 @@
   <!-- TEXT -->
   <p id="intro" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
 
+  <br><br>
   <div id="signature" data-aos="fade-up" data-aos-anchor="#formTitle" data-aos-delay="300">
     <span id="signatureText"></span>
   </div>
@@ -424,7 +430,7 @@ const translations = {
     addHomeIntro: "Puoi salvare questo sito come se fosse un’app sul tuo telefono.",
     iosSteps: "Tocca il pulsante <strong>Condividi</strong> (⬆️) → <strong>Aggiungi alla schermata Home</strong> → Conferma.",
     androidSteps: "Tocca i <strong>tre puntini</strong> (⋮) → <strong>Aggiungi a schermata Home</strong> → Conferma.",
-    signature: "Federico & Erandika",
+    signature: "Erandika & Federico",
     btnLocation: "Location",
     btnDate: "Salva la data",
     btnGift: "Se desiderate farci un regalo, il dono più grande per noi sarà avervi accanto. Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️",
@@ -456,7 +462,7 @@ const translations = {
     addHomeIntro: "You can save this website like an app on your phone.",
     iosSteps: "Tap <strong>Share</strong> (⬆️) → <strong>Add to Home Screen</strong> → Confirm.",
     androidSteps: "Tap the <strong>three dots</strong> (⋮) → <strong>Add to Home Screen</strong> → Confirm.",
-    signature: "Federico & Erandika",
+    signature: "Erandika & Federico",
     btnLocation: "Location",
     btnDate: "Save the date",
     btnGift: "Having you with us is the greatest gift. For those who wish, here you’ll find the details for a small, heartfelt thought ❤️",
@@ -543,13 +549,21 @@ function openMaps() {
 }
 
 function addToCalendar() {
-  window.open(
-    "https://www.google.com/calendar/render?action=TEMPLATE" +
-    "&text=Wedding" +
-    "&dates=20260611T143000/20260611T230000" +
-    "&location=Giardini+la+Pergola,+Via+Dazio+35,+Alessandria",
-    "_blank"
-  );
+  const isApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+
+  if (isApple) {
+    // Apple Calendar
+    window.location.href = "wedding.ics";
+  } else {
+    // Google Calendar
+    window.open(
+      "https://www.google.com/calendar/render?action=TEMPLATE" +
+      "&text=Wedding" +
+      "&dates=20260611T143000/20260612T010000" +
+      "&location=Giardini+la+Pergola,+Via+Dazio+35,+Alessandria",
+      "_blank"
+    );
+  }
 }
 
 function openGift() {
