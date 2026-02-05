@@ -286,6 +286,31 @@
       font-family: 'Montserrat', sans-serif;
     }
 
+    .sheet-content {
+      transition: transform 0.35s ease;
+      touch-action: none;
+    }
+
+    #giftSheet.closing .sheet-content {
+      transform: translateY(100%);
+    }
+
+    .sheet-handle {
+      animation: handlePulse 2s infinite;
+    }
+
+    @keyframes handlePulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    #giftSheet {
+      pointer-events: none;
+    }
+
+    #giftSheet.active {
+      pointer-events: auto;
+    }
   </style>
 </head>
 
@@ -536,7 +561,14 @@ function openGift() {
 }
 
 function closeGiftSheet() {
-  document.getElementById('giftSheet').classList.remove('active');
+  const sheet = document.getElementById('giftSheet');
+
+  sheet.classList.add('closing');
+  sheet.querySelector('.sheet-content').style.transform = '';
+
+  setTimeout(() => {
+    sheet.classList.remove('active', 'closing');
+  }, 350);
 }
 
 function copyIBAN() {
@@ -596,6 +628,51 @@ setInterval(updateCountdown, 1000);
 
 /* INIT */
 applyLanguage(detectLanguage());
+
+
+setTimeout(() => {
+    let startY = 0;
+    let currentY = 0;
+    let dragging = false;
+
+    const sheet = document.getElementById('giftSheet');
+    const sheetContent = sheet.querySelector('.sheet-content');
+    const handle = sheet.querySelector('.sheet-handle');
+
+    handle.addEventListener('touchstart', e => {
+      if (!sheet.classList.contains('active')) return;
+
+      startY = e.touches[0].clientY;
+      dragging = true;
+    });
+
+    handle.addEventListener('touchmove', e => {
+      if (!dragging || !sheet.classList.contains('active')) return;
+
+      currentY = e.touches[0].clientY;
+      const diff = currentY - startY;
+
+      if (diff > 0) {
+        sheetContent.style.transform = `translateY(${diff}px)`;
+      }
+    });
+
+    handle.addEventListener('touchend', () => {
+      if (!dragging) return;
+
+      dragging = false;
+      const diff = currentY - startY;
+
+      if (diff > 120) {
+        closeGiftSheet();
+      } else {
+        sheetContent.style.transform = `translateY(0)`;
+      }
+
+      startY = currentY = 0;
+    });
+}, 350);
+
 </script>
 
 
