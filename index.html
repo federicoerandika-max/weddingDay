@@ -13,7 +13,10 @@
   <meta property="og:url" content="https://federicoerandika-max.github.io/weddingDay">
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="assets/css/future-updates.css">
+  <link rel="stylesheet" href="assets/css/photo-share.css">
+  <link rel="stylesheet" href="assets/css/gallery.css">
+  
   <style>
     [data-aos] {
       transition-property: transform, opacity;
@@ -336,6 +339,23 @@
       margin: 0;
       line-height: 1.6;
     }
+
+    /* animazioni in out */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all .6s ease;
+    }
+
+    .fade-in-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-out-down {
+      opacity: 0;
+      transform: translateY(20px);
+    }
   </style>
 </head>
 
@@ -376,28 +396,52 @@
 
   <!-- FORM -->
   <h2 id="formTitle" data-aos="fade-up"></h2>
-  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdMn0MNh3PHIAVU8OO1W1rGzOxo4_UyxrAfP-YkgaRZuObMDg/viewform?embedded=true"
-    width="100%"
-    height="900"
-    frameborder="0"
-    marginheight="0"
-    marginwidth="0">
-  </iframe>
+  <div id="moduleForm">
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdMn0MNh3PHIAVU8OO1W1rGzOxo4_UyxrAfP-YkgaRZuObMDg/viewform?embedded=true"
+      width="100%"
+      height="900"
+      frameborder="0"
+      marginheight="0"
+      marginwidth="0">
+    </iframe>
+  </div>
+  
 
 
   <br>
-  <p id="futureUpdates" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
+  <div class="future-updates" data-aos="fade-up" data-aos-delay="150">
+    <span class="future-icon">✨</span>
+    <p id="futureUpdates"></p>
+  </div>
 
+  <div id="instagramShare" class="instagram-share hidden" data-aos="zoom-in">
+    <p style="margin-top:12px; font-size:0.85rem; opacity:0.7;" id="tagAdvice">
+    </p>
+    <p class="share-text" id="shareText">
+    </p>
 
-  <div class="info-buttons" data-aos="fade-up">
+    <button class="ig-button" onclick="openInstagram()" id="shareOnInstagram">
+    </button>
+  </div>
+
+  <div class="info-buttons fade-in-up" id="info-buttons">
     <button onclick="openMaps()">📍 <span id="btnLocation"></span></button>
     <button onclick="addToCalendar()">📅 <span id="btnDate"></span></button>
     <button onclick="openGift()">🎁 <span id="btnGift"></span></button>
   </div>
 </div>
 
+<section id="hashtagGallery" class="hashtag-gallery hidden" data-aos="fade-up">
+  <h3 id="hashtagGalleryTitle"></h3>
+  <p id="publishedPhotos">
+  </p>
 
-<section id="addToHome" data-aos="fade-up" style="margin-top:50px;">
+  <div class="gallery-embed">
+    <!-- iframe servizio hashtag qui -->
+  </div>
+</section>
+
+<section id="addToHome" data-aos="fade-up" style="margin: 33px;border: 1px solid;padding: 36px;">
   <h2 id="addHomeTitle"></h2>
 
   <div style="max-width:700px;margin:auto;font-size:15px;line-height:1.6;">
@@ -460,7 +504,18 @@ const translations = {
     copy: "Tocca per copiare",
     closeButton: 'Chiudi',
     name: "INTESTATARIO: FEDERICO HARIN ATTYGALA",
-    footer: "© 2026 — Sito realizzato con amore da<br><strong>Federico & Erandika</strong>"
+    footer: "© 2026 — Sito realizzato con amore da<br><strong>Federico & Erandika</strong>",
+    tagAdvice: `taggaci <strong id="tagEra">@erandikaconthrath</strong> e <strong id="tagFede">@harinfederico</strong>`,
+    shareOnInstagram: "📸 Condividi su Instagram",
+    shareText: `
+      Il grande giorno è arrivato 💍✨<br>
+      Condividi una foto e festeggia con noi!
+    `,
+    publishedPhotos: `
+      Tutte le foto pubblicate con<br>
+      <strong>#ErandikaFedericoWedding2026</strong>
+    `,
+    hashtagGalleryTitle: "Momenti condivisi ❤️",
   },
   en: {
     title: "We’re getting married 💍",
@@ -493,7 +548,18 @@ const translations = {
     copy: "Click to copy",
     closeButton: 'Close',
     name: "ACCOUNT HOLDER: HARIN FEDERICO ATTYGALA",
-    footer: "© 2026 — Website lovingly crafted by<br><strong>Federico & Erandika</strong>"
+    footer: "© 2026 — Website lovingly crafted by<br><strong>Federico & Erandika</strong>",
+    tagAdvice: `tag us <strong id="tagEra">@erandikaconthrath</strong> & <strong id="tagFede">@harinfederico</strong>`,
+    shareOnInstagram: "📸 Share on Instagram",
+    shareText: `
+      The big day has arrived 💍✨<br>
+      Share a photo and celebrate with us!
+    `,
+    publishedPhotos: `
+      All the photos shared with<br>
+      <strong>#ErandikaFedericoWedding2026</strong>
+    `,
+    hashtagGalleryTitle: "Shared moments ❤️",
   }
 };
 
@@ -535,18 +601,28 @@ function applyLanguage(lang) {
   document.getElementById('btnLocation').innerHTML = t.btnLocation;
   document.getElementById('btnDate').innerHTML = t.btnDate;
   document.getElementById('btnGift').innerHTML = t.btnGift;
+  document.getElementById('tagAdvice').innerHTML = t.tagAdvice;
+  document.getElementById('shareOnInstagram').innerHTML = t.shareOnInstagram;
+  document.getElementById('shareText').innerHTML = t.shareText;
+  document.getElementById('publishedPhotos').innerHTML = t.publishedPhotos;
+  document.getElementById('hashtagGalleryTitle').innerHTML = t.hashtagGalleryTitle;
   
   if (document.getElementById('footerText')) {
     document.getElementById('footerText').innerHTML = t.footer;
   }
 
   const videoSource = document.getElementById('videoSource');
-  videoSource.src = lang === 'en' ? 'assets/video-en.mp4' : 'assets/video-it.mp4';
+  var videoPath = 'assets/';
+
+  videoSource.src = videoPath + (lang === 'en' ? 'video-en.mp4' : 'video-it.mp4');
 
   const offset = 1; // secondi prima della fine
   const video = document.getElementById('weddingVideo');
   video.load();
   video.play();
+  if (!window.location.href.includes('github.io')) {
+    video.playbackRate = 4.0;
+  }
   const wrapper = document.querySelector('.video-wrapper');
   document.body.classList.add('lock-scroll');
   wrapper.classList.add('fullscreen');
@@ -670,17 +746,27 @@ function updateCountdown() {
     <div>${m}<br>Min</div>
     <div>${s}<br>Sec</div>
   `;
+
+  activateWeddingFeatures();
 }
 
+countDownForm();
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
 /* INIT */
 applyLanguage(detectLanguage());
 
-
+/* Wait till the video fade out */
 setTimeout(() => {
-    let startY = 0;
+    dragDownGiftHandler();
+    animationHandlerByID("footer");
+    animationHandlerByID("info-buttons");
+}, 350);
+
+/* drag down del gift sheet */
+function dragDownGiftHandler() {
+  let startY = 0;
     let currentY = 0;
     let dragging = false;
 
@@ -720,10 +806,59 @@ setTimeout(() => {
 
       startY = currentY = 0;
     });
-}, 350);
+}
+
+/* observer bidirezionale per animazioni */
+function animationHandlerByID(elementID) {
+  const element = document.getElementById(elementID);
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        element.classList.add("visible");
+        element.classList.remove("fade-out-down");
+      } else {
+        element.classList.remove("visible");
+        element.classList.add("fade-out-down");
+      }
+    },
+    { threshold: 0.2 }
+  );
+
+  observer.observe(element);
+}
+
+function vibrateOnReveal() {
+  if ("vibrate" in navigator) {
+    navigator.vibrate([200, 100, 200]);
+  }
+}
+
+function activateWeddingFeatures() {
+  const now = new Date();
+
+  if (now >= weddingDate) {
+    const igSection = document.getElementById("instagramShare");
+    const gallery = document.getElementById("hashtagGallery");
+    igSection.classList.remove("hidden");
+    gallery.classList.remove("hidden");
+    vibrateOnReveal();
+    AOS.refresh();
+  }
+}
+
+function countDownForm() {
+  // hiding form after deadline (30 May 2026, 14:30 Europe/Rome time)
+  const formEndingDate = new Date("2026-05-30T14:30:00+02:00"); // Europe/Rome (DST)
+  const now = new Date();
+  if (now >= formEndingDate) {
+    const moduleForm = document.getElementById("moduleForm");
+    moduleForm.style.display = "none";
+  }
+}
 
 </script>
-
+<script src="assets/js/photo-share.js"></script>
 
 
 <div id="giftSheet">
@@ -746,7 +881,7 @@ setTimeout(() => {
   </div>
 </div>
 
-<footer class="site-footer" data-aos="fade-up">
+<footer class="site-footer fade-in-up" id="footer">
   <p id="footerText"></p>
 </footer>
 
