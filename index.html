@@ -422,6 +422,11 @@
 
     <button class="ig-button" onclick="openInstagram()" id="shareOnInstagram">
     </button>
+
+    <button id="wedshootsBtn"
+        class="action-btn"
+        data-i18n="wedshoots_btn" onclick="onClickShareAPhoto()">
+    </button>
   </div>
 
   <div class="info-buttons fade-in-up" id="info-buttons">
@@ -492,7 +497,7 @@ const translations = {
     futureUpdates: "Seguiranno a breve ulteriori dettagli dell\'evento.",
     addHomeTitle: "Aggiungi alla Home 📲",
     addHomeIntro: "Puoi salvare questo sito come se fosse un’app sul tuo telefono.",
-    iosSteps: "Tocca il pulsante <strong>Condividi</strong> (⬆️) → <strong>Aggiungi alla schermata Home</strong> → Conferma.",
+    iosSteps: `Tocca il pulsante <strong>Condividi</strong> <img src="assets/img/share-apple.svg" alt="share icon" width="24" height="24" style="position: relative;top: 6px;" onclick="addToHome()"> → <strong>Aggiungi alla schermata Home</strong> → Conferma.`,
     androidSteps: "Tocca i <strong>tre puntini</strong> (⋮) → <strong>Aggiungi a schermata Home</strong> → Conferma.",
     signature: "Erandika & Federico",
     btnLocation: "Location",
@@ -506,7 +511,7 @@ const translations = {
     name: "INTESTATARIO: FEDERICO HARIN ATTYGALA",
     footer: "© 2026 — Sito realizzato con amore da<br><strong>Federico & Erandika</strong>",
     tagAdvice: `taggaci <strong id="tagEra">@erandikaconthrath</strong> e <strong id="tagFede">@harinfederico</strong>`,
-    shareOnInstagram: "📸 Condividi su Instagram",
+    shareOnInstagram: "Condividi su Instagram 📸 ",
     shareText: `
       Il grande giorno è arrivato 💍✨<br>
       Condividi una foto e festeggia con noi!
@@ -516,6 +521,10 @@ const translations = {
       <strong>#ErandikaFedericoWedding2026</strong>
     `,
     hashtagGalleryTitle: "Momenti condivisi ❤️",
+    wedshoots_btn: `
+      Condividi i tuoi scatti 📸<br>
+      <small> (il codice è già copiato dovrai solo incollarlo) </small>
+    `
   },
   en: {
     title: "We’re getting married 💍",
@@ -536,7 +545,7 @@ const translations = {
     futureUpdates: "Stay tuned for more updates regarding the event.",
     addHomeTitle: "Add to Home Screen 📲",
     addHomeIntro: "You can save this website like an app on your phone.",
-    iosSteps: "Tap <strong>Share</strong> (⬆️) → <strong>Add to Home Screen</strong> → Confirm.",
+    iosSteps: `Tap <strong>Share</strong> <img src="assets/img/share-apple.svg" alt="share icon" width="24" height="24" style="position: relative;top: 6px;" onclick="addToHome()"> → <strong>Add to Home Screen</strong> → Confirm.`,
     androidSteps: "Tap the <strong>three dots</strong> (⋮) → <strong>Add to Home Screen</strong> → Confirm.",
     signature: "Erandika & Federico",
     btnLocation: "Location",
@@ -550,7 +559,7 @@ const translations = {
     name: "ACCOUNT HOLDER: HARIN FEDERICO ATTYGALA",
     footer: "© 2026 — Website lovingly crafted by<br><strong>Federico & Erandika</strong>",
     tagAdvice: `tag us <strong id="tagEra">@erandikaconthrath</strong> & <strong id="tagFede">@harinfederico</strong>`,
-    shareOnInstagram: "📸 Share on Instagram",
+    shareOnInstagram: "Share on Instagram 📸",
     shareText: `
       The big day has arrived 💍✨<br>
       Share a photo and celebrate with us!
@@ -560,6 +569,9 @@ const translations = {
       <strong>#ErandikaFedericoWedding2026</strong>
     `,
     hashtagGalleryTitle: "Shared moments ❤️",
+    wedshoots_btn: `
+            Share your photos 📸<br>
+            <small> (the code is already copied, you just need to paste it) </small>`
   }
 };
 
@@ -603,6 +615,7 @@ function applyLanguage(lang) {
   document.getElementById('btnGift').innerHTML = t.btnGift;
   document.getElementById('tagAdvice').innerHTML = t.tagAdvice;
   document.getElementById('shareOnInstagram').innerHTML = t.shareOnInstagram;
+  document.getElementById('wedshootsBtn').innerHTML = t.wedshoots_btn;
   document.getElementById('shareText').innerHTML = t.shareText;
   document.getElementById('publishedPhotos').innerHTML = t.publishedPhotos;
   document.getElementById('hashtagGalleryTitle').innerHTML = t.hashtagGalleryTitle;
@@ -855,6 +868,34 @@ function countDownForm() {
     const moduleForm = document.getElementById("moduleForm");
     moduleForm.style.display = "none";
   }
+}
+
+const shareData = {
+  title: translations[globalLanguage].signature,
+  text: translations[globalLanguage].title,
+  url: window.location.href // L'URL della pagina corrente
+}
+
+async function addToHome() {
+  // Controlla se il browser supporta la Web Share API
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      console.log('Errore o condivisione annullata:', err);
+    }
+  }
+}
+
+function onClickShareAPhoto() {
+  navigator.clipboard.writeText("IT218643e8");
+  const wedshootsUrl = "https://www.matrimonio.com/web/W9094403/wedshoots-8";
+
+  if ("vibrate" in navigator) {
+    navigator.vibrate([150, 80, 150]);
+  }
+
+  window.open(wedshootsUrl, "_blank");
 }
 
 </script>
